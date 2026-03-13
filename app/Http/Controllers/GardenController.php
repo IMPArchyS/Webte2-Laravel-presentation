@@ -9,7 +9,8 @@ class GardenController extends Controller
 {
     public function index()
     {
-        return Garden::all();
+        $gardens = Garden::all();
+        return view("gardens.index", ["gardens" => $gardens]);
     }
 
     public function create()
@@ -19,27 +20,48 @@ class GardenController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+        ]);
+
+        Garden::create([
+            'name' => $validated['name'],
+            'address' => $validated['address'],
+            'user_id' => auth()->id(),
+        ]);
+
+        return to_route('gardens.index')->with('message', 'Garden created successfully');
     }
 
     public function show(Garden $garden)
     {
-        return $garden->load("plants");
+        return view("gardens.show", ["garden" => $garden->load("plants")]);
     }
 
     public function edit(Garden $garden)
     {
-        return view("gardens.edit");
+        return view('gardens.edit', ['garden' => $garden]);
     }
 
     public function update(Request $request, Garden $garden)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+        ]);
+
+        $garden->update([
+            'name' => $validated['name'],
+            'address' => $validated['address'],
+        ]);
+
+        return to_route('gardens.show', $garden)->with('message', 'Garden updated successfully');
     }
 
     public function destroy(Garden $garden)
     {
         $garden->delete();
-        return "deleted garden";
+        return to_route('gardens.index')->with('message', 'Garden was deleted');
     }
 }
