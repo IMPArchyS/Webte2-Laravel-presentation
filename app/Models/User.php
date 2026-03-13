@@ -29,4 +29,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function gardens()
+    {
+        return $this->hasMany(Garden::class, "user_id");
+    }
 }
