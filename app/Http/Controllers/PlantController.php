@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plant;
+use App\Models\Garden;
 use Illuminate\Http\Request;
 
 class PlantController extends Controller
 {
     public function index()
     {
-        $plants = Plant::all();
+        $plants = Plant::whereHas('garden', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->get();
+
         return view("plants.index", ["plants" => $plants]);
     }
 
@@ -25,6 +29,12 @@ class PlantController extends Controller
             'latin_name' => ['required', 'string', 'max:255'],
             'garden_id' => ['required', 'exists:gardens,id']
         ]);
+
+        $garden = Garden::findOrFail($validated['garden_id']);
+
+        if ($garden->user_id !== auth()->id()) {
+            abort(403);
+        }
 
         Plant::create([
             'name' => $validated['name'],
@@ -48,6 +58,10 @@ class PlantController extends Controller
 
     public function update(Request $request, Plant $plant)
     {
+        if ($plant->garden->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:plants,name'],
             'latin_name' => ['required', 'string', 'max:255'],

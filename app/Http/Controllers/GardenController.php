@@ -9,7 +9,7 @@ class GardenController extends Controller
 {
     public function index()
     {
-        $gardens = Garden::all();
+        $gardens = Garden::query()->where('user_id', auth()->id())->get();
         return view("gardens.index", ["gardens" => $gardens]);
     }
 
