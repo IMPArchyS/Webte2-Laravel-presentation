@@ -10,8 +10,9 @@ Route::get('/', function () {
 });
 
 // Gardens
-Route::get("/gardens", [GardenController::class, 'index'])->name('gardens');
-Route::get("/gardens/{garden}", [GardenController::class, 'show'])->name('gardens.show');
+// Route::get("/gardens", [GardenController::class, 'index'])->name('gardens');
+// Route::get("/gardens/{garden}", [GardenController::class, 'show'])->name('gardens.show');
+Route::resource("gardens", GardenController::class);
 
 // Plants
 Route::get("/plants", [PlantController::class, 'index'])->name('plants');

@@ -14,7 +14,7 @@ class PlantController extends Controller
 
     public function create()
     {
-        //
+        return view("plants.create");
     }
 
     public function store(Request $request)
@@ -29,7 +29,7 @@ class PlantController extends Controller
 
     public function edit(Plant $plant)
     {
-        //
+        return view("plants.edit");
     }
 
     public function update(Request $request, Plant $plant)
@@ -39,6 +39,7 @@ class PlantController extends Controller
 
     public function destroy(Plant $plant)
     {
-        //
+        $plant->delete();
+        return "deleted plant";
     }
 }
