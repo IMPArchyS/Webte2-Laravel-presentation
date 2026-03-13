@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 
 
         Plant::factory()->count(2)->create([
-            "name" => fake()->name(),
+            "name" => fake()->unique()->name(),
             "latin_name" => fake()->name(),
             "planted_at" => fake()->date(),
             "garden_id" => $garden->id,
