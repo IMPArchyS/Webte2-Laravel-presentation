@@ -11,7 +11,7 @@ class PlantFactory extends Factory
     public function definition(): array
     {
         return [
-            "name" => fake()->name(),
+            "name" => fake()->unique()->name(),
             "latin_name" => fake()->name(),
             "planted_at" => fake()->date(),
             "garden_id" => Garden::factory(),
