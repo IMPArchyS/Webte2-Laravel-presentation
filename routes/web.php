@@ -15,8 +15,9 @@ Route::get('/', function () {
 Route::resource("gardens", GardenController::class);
 
 // Plants
-Route::get("/plants", [PlantController::class, 'index'])->name('plants.index');
-Route::get("/plants/{plant}", [PlantController::class, 'show'])->name('plants.show');
+// Route::get("/plants", [PlantController::class, 'index'])->name('plants.index');
+// Route::get("/plants/{plant}", [PlantController::class, 'show'])->name('plants.show');
+Route::resource("plants", PlantController::class);
 
 // Auth
 Route::get('/dashboard', function () {
