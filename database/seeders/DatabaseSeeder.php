@@ -19,22 +19,16 @@ class DatabaseSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'imp',
             'email' => 'imp@imp.sk',
-            'email_verified_at' => now(),
             'password' => Hash::make('imp'),
-            'remember_token' => Str::random(10),
         ]);
 
         $garden = Garden::factory()->create([
             "name" => "Zahradka",
-            "address" => fake()->address(),
             "user_id" => $user->id,
         ]);
 
 
         Plant::factory()->count(2)->create([
-            "name" => fake()->unique()->name(),
-            "latin_name" => fake()->name(),
-            "planted_at" => fake()->date(),
             "garden_id" => $garden->id,
         ]);
     }
