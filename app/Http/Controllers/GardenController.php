@@ -36,11 +36,19 @@ class GardenController extends Controller
 
     public function show(Garden $garden)
     {
+        if ($garden->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         return view("gardens.show", ["garden" => $garden->load("plants")]);
     }
 
     public function edit(Garden $garden)
     {
+        if ($garden->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         return view('gardens.edit', ['garden' => $garden]);
     }
 
@@ -61,6 +69,10 @@ class GardenController extends Controller
 
     public function destroy(Garden $garden)
     {
+        if ($garden->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $garden->delete();
         return to_route('gardens.index')->with('message', 'Garden was deleted');
     }

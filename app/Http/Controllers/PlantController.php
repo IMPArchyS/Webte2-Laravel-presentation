@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plant;
 use App\Models\Garden;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PlantController extends Controller
 {
@@ -48,11 +49,19 @@ class PlantController extends Controller
 
     public function show(Plant $plant)
     {
+        if ($plant->garden->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         return view("plants.show", ["plant" => $plant]);
     }
 
     public function edit(Plant $plant)
     {
+        if ($plant->garden->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         return view('plants.edit', ['plant' => $plant]);
     }
 
@@ -63,7 +72,7 @@ class PlantController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:plants,name'],
+            'name' => ['required', 'string', 'max:255', Rule::unique('plants', 'name')->ignore($plant->id)],
             'latin_name' => ['required', 'string', 'max:255'],
         ]);
 
@@ -78,6 +87,10 @@ class PlantController extends Controller
 
     public function destroy(Plant $plant)
     {
+        if ($plant->garden->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $plant->delete();
         return to_route('plants.index')->with('message', 'Plant was deleted');
     }
